@@ -1,0 +1,31 @@
+<%- include("partials/header", {pagename: "Medicines"}) %>
+
+    <div>
+        <h4>
+            <a href="medicines/add" > Add Medicine </a>
+        </h4>
+    </div>
+    <div>
+        <table border="1">
+            <tr>
+                <th> No. </th>
+                <th> Name </th>
+                <th> Stock </th>
+                <th> Action </th>
+            </tr>
+            <% data.forEach((element, index) => { %>
+            <tr>
+                <td> <%= ++index %> </td>
+                <td> <%= element.name %> </td>
+                <td> <%= element.stock %> </td>
+                <td>
+                    <a href="/medicines/:id/edit" > Edit </a>
+                     | 
+                     <a href="/medicines/:id/delete" > Delete </a>
+                </td>
+            </tr>    
+            <% }); %>
+        </table>
+    </div>
+    
+<%- include("partials/footer") %>
