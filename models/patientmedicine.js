@@ -11,13 +11,31 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      PatientMedicine.belongsTo(models.Patient)
+      PatientMedicine.belongsTo(models.Medicine)
     }
   };
   PatientMedicine.init({
     PatientId: DataTypes.INTEGER,
     MedicineId: DataTypes.INTEGER,
-    timesPerDay: DataTypes.INTEGER,
-    doses: DataTypes.INTEGER
+    timesPerDay: {
+      type : DataTypes.INTEGER,
+      validate : {
+        notEmpty : {
+          args : true,
+          msg : "Times Per Day is required"
+        }
+      }
+    },
+    doses: {
+      type : DataTypes.INTEGER,
+      validate : {
+        notEmpty : {
+          args : true,
+          msg : "Doses is required"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'PatientMedicine',

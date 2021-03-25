@@ -19,7 +19,7 @@ router.get('/logout', sessionController.logout)
 router.use(auth)
 router.use('/patients', patientRoute)
 
-router.use('/medicine', medicineRoute)
+//router.use('/medicine', medicineRoute)
 
 
 module.exports = router
