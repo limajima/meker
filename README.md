@@ -1,2 +1,2 @@
 # meker
-Medicine tracker - reminder apps
+your medicine tracker-reminder apps

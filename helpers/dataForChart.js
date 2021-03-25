@@ -26,6 +26,3 @@ Patient.findAll()
 .catch ((err) => {
     res.send(err)
 })
-
-
-//EXPERIMENTAL
