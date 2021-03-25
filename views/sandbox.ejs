@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include ('./partials/styles')%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <title>Charts</title>
+</head>
+<body style="background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/double-bubble-outline.png);">
+    <%- include ('./partials/navbar')%>
+    <div class="container">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        let newLabel = "<%= arrLabels %>"
+        newLabel = newLabel.split(',')
+        let newData = "<%= arrDatas %>"
+        newData = newData.split(',')
+        let myChart = document.getElementById('myChart').getContext('2d');
+        let medChart = new Chart(myChart, {
+            type: 'pie',
+            data: {
+                labels: newLabel,
+                datasets: [{
+                    label: "population",
+                    data: newData,
+                    backgroundColor: ['red','green','blue','red','green','blue','red','green','blue','red','green','blue','red','green','blue'],
+                    borderWidth: 4
+                }],
+            },
+            options: {}
+        });
+    </script>
+</body>
+</html>
