@@ -11,11 +11,35 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Medicine.belongsToMany(models.Patient, {through: "PatientMedicine"})
     }
   };
   Medicine.init({
-    name: DataTypes.STRING,
-    stock: DataTypes.INTEGER
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "Please fill in the Medicine name"
+        }
+      }
+    },
+    stock: {
+      type: DataTypes.INTEGER,
+      validate: {
+        errors(value) {
+          let fatal = false
+          if (!value) {
+            fatal = "Please fill in the Medicine stock"
+          } else if (value <= 0) {
+            fatal = "Medicine stock should be greater than 0"
+          }
+          if (fatal) {
+            throw new Error (fatal)
+          }
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Medicine',

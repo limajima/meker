@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include ('./partials/styles')%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <title>Medicines</title>
+</head>
+<body style="background-image: url(https://www.toptal.com/designers/subtlepatterns/patterns/double-bubble-outline.png);">
+    <%- include ('./partials/navbar')%>
+    <div style="text-align: center;margin-left: auto;margin-right: auto;">
+        <h1>Medicines List</h1>
+    
+        <form action="/medicines/add">
+            <button type="submit" class="btn btn-outline-success">Add Medicine</button>
+        </form>
+    </div>
+    <table class="table table-hover" style="width: 80%; margin-left: auto;margin-right: auto;border border-4">
+        <thead class="border border-4">
+            <tr class="border border-4">
+                <th> No. </th>
+                <th> Name </th>
+                <th> Stock </th>
+                <th> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            <form>
+            <% data.forEach((element, index) => { %>
+            <tr class="border border-4">
+                <td><%= ++index %></td>
+                <td><%= element.name %></td>
+                <td><%= element.stock %></td>
+                <td><button class="btn btn-outline-success" formaction="medicines/<%= element.id %>/edit" formmethod="GET"> Edit </button> <button class="btn btn-outline-success" onclick="return confirm('Are you sure want to remove <%= element.name %> from medicines?')" type="submit" formaction="medicines/<%= element.id %>/delete" formmethod="GET" > Delete </button> </td>
+            </tr>    
+            <% }) %>
+        </form>
+        </tbody>
+    </table>
+    <br>
+</body>
+</html>

@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const medicineRoute = require('./medicineRoute')
+const routerMedicine = require('./router-medicine');
 const patientRoute = require('./patientRoute')
 const sessionController = require('../controllers/sessionController')
 const auth = require('../helpers/auth')
@@ -18,8 +18,6 @@ router.post('/login', sessionController.checkAccount)
 router.get('/logout', sessionController.logout)
 router.use(auth)
 router.use('/patients', patientRoute)
-
-//router.use('/medicine', medicineRoute)
-
+router.use('/medicines', routerMedicine);
 
 module.exports = router
