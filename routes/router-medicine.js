@@ -7,6 +7,6 @@ router.get('/add', ControllerMedicine.formAdd)
 router.post('/add', ControllerMedicine.add)
 router.get('/:id/edit', ControllerMedicine.formEdit)
 router.post('/:id/edit', ControllerMedicine.edit)
-router.get('/:id/edit', ControllerMedicine.delete)
+router.get('/:id/delete', ControllerMedicine.delete)
 
 module.exports = router;

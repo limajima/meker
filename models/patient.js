@@ -11,17 +11,60 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Patient.belongsToMany(models.Medicine, {through: "PatientMedicine"})
+      Patient.belongsToMany(models.Medicine, {through:models.PatientMedicine})
     }
+
+    sayMyName () {
+      let result;
+      if (this.gender === "male") {
+        result = `Mr. ${this.name}`
+      } else if (this.gender === "female") {
+        result = `Ms. ${this.name}`
+      }
+      return result
+    }
+
   };
   Patient.init({
-    name: DataTypes.STRING,
-    age: DataTypes.INTEGER,
+    name: {
+      type: DataTypes.STRING,
+      validate : {
+        notEmpty : {
+          args : true,
+          msg : "Please fill in the name box"
+        }
+      }
+    },
+    age: {
+      type: DataTypes.INTEGER,
+      validate : {
+        errors (value) {
+          let fatal = false
+          if (value === undefined || value === null || !value) {
+            fatal = "Please fill in the age box"
+          } else if (value <= 0) {
+            fatal = "Please enter a valid age"
+          }
+          if (fatal) {
+            throw new Error (fatal)
+          }
+        }        
+      }
+    },
     comorbid: DataTypes.STRING,
-    gender: DataTypes.STRING
+    gender : DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Patient',
+    hooks : {
+      afterFind (instance) {
+        if (instance.comorbid) {
+          instance.comorbid = (instance.comorbid).split(',')
+        } else {
+          instance.comorbid = []
+        }
+      }
+    }
   });
   return Patient;
 };

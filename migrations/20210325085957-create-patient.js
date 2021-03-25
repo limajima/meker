@@ -1,6 +1,6 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up:  (queryInterface, Sequelize) => {
     return queryInterface.createTable('Patients', {
       id: {
         allowNull: false,
@@ -17,9 +17,6 @@ module.exports = {
       comorbid: {
         type: Sequelize.STRING
       },
-      gender: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -30,7 +27,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down:  (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Patients');
   }
 };

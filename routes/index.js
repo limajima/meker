@@ -1,11 +1,23 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router()
 const routerMedicine = require('./router-medicine');
+const patientRoute = require('./patientRoute')
+const sessionController = require('../controllers/sessionController')
+const auth = require('../helpers/auth')
 
 router.get('/', (req, res) => {
-    res.send('WELCOME')
-});
+    console.log("=============");
+    let session = req.session
+    console.log(session);
+    res.render('home', {session})
+})
 
+router.get('/register', sessionController.register)
+router.post('/register', sessionController.newAccount)
+router.get('/login', sessionController.login)
+router.post('/login', sessionController.checkAccount)
+router.get('/logout', sessionController.logout)
+router.use(auth)
+router.use('/patients', patientRoute)
 router.use('/medicines', routerMedicine);
 
-module.exports = router;
+module.exports = router
