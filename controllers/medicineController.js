@@ -90,6 +90,31 @@ class ControllerMedicine {
             res.send(err)
         })
     }
+
+    static charts(req, res) {
+        let query;
+        let arrLabels = [];
+        let arrDatas = [];
+        if(req.query.err) {
+            query = (req.query.err).split(',')
+        } else {
+            Medicine
+                .findAll()
+                .then(data => {
+                    if (query) {
+                        query = query.split(',')
+                    }
+                    data.forEach(element => {
+                        arrLabels.push(element.name)
+                        arrDatas.push(element.stock)
+                    })
+                    res.render('sandbox', { arrLabels, arrDatas, query })
+                })
+                .catch(err => {
+                    res.send(err)
+                })
+        }
+    }
 }
 
 module.exports = ControllerMedicine;
