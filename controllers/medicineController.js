@@ -1,95 +1,111 @@
-const { Medicine, Patient } = require('../models/index');
+const {Medicine, Patient,PatientMedicine} = require('../models')
 
-class ControllerMedicine {
-    static findAll(req, res) {
-        Medicine
-            .findAll()
-            .then(data => {
-                res.render('medicines', { data })
+class MedicineController {
+    static showAll (req, res) {
+        Medicine.findAll ()
+        
+        .then((data) => {
+            console.log(data); //
+            let result = []
+            data.forEach(el => {
+                if (el.stock < 10) {
+                    result.push(el.name)
+                }
+            });
+
+            let labels = []
+            data.forEach(e =>{
+                labels.push(e.name)
             })
-            .catch(err => {
-                console.log(err)
-                res.send(err)
+
+            let quantity = []
+            data.forEach(e => {
+                quantity.push(e.stock)
             })
+            console.log(labels);
+            result = result.join(', ')
+            console.log(result);
+            res.render('medicineView',{data, title: 'Medicine List', result, labels})
+        })
+        .catch ((err) => {
+            res.send(err.message)
+        })
+
+
     }
-    static formAdd(req, res) {
-        let query;
-        if(req.query.err) {
-            query = (req.query.err).split(',')
-        }
-        res.render('medicinesForm', { query })
-    }
+
     static add(req, res) {
-        let newData = {
+        let errors = req.query.errors
+        res.render ('addMedicineView', {title: 'Add Medicine', errors})
+    }
+
+    static afterAdd (req, res) {
+        let dataNew = {
             name: req.body.name,
             stock: req.body.stock
         }
-        Medicine
-            .create(newData)
-            .then(data => {
-                res.redirect('/medicines')
-            })
-            .catch(err => {
-                let errors = []
-                err.errors.forEach(element => {
-                    errors.push(element.message)
-                })
-                res.redirect(`/medicines/add?err=${errors}`)
-            })
-    }
-    static formEdit(req, res) {
-        let query;
-        if(req.query.err) {
-            query = (req.query.err).split(',')
-        } else {
-            Medicine
-            .findAll({
-                where: {
-                    id: req.params.id
-                }
-            })
-            .then(data => {
-                if (query) {
-                    query = query.split(',')
-                }
-                res.render('medicinesUpdate', { data, query })
-            })
-            .catch(err => {
-                res.send(err)
-            })
-        }
-    }
-    static edit(req, res) {
-        Medicine
-            .update({
-                name: req.body.name,
-                stock: req.body.stock
-            },
-            {
-                where: {
-                    id: req.params.id
-                }
-            })
-            .then(data => {
-                res.redirect('/medicines')
-            })
-            .catch(err => {
-                res.send(err)
-            })
-    }
-    static delete(req, res) {
-        Medicine.destroy({
-            where: {
-                id: req.params.id
-            }
+        Medicine.create(dataNew)
+        .then(() => {
+            res.redirect('/medicine')
         })
-        .then(data => {
-            res.redirect('/medicines')
+        .catch (err => {
+            let errors = []
+            err.errors.forEach(error => {
+                errors.push(error.message)
+            })
+            res.redirect(`/medicine/add?errors=${errors}`)
+        })
+    }
+
+    static edit(req, res) {
+        //let medData
+        let errors = req.query.errors
+        Medicine.findByPk(req.params.id)
+
+        .then((data) => {
+            res.render ('editMedicineView', {data, title: 'Edit Medicine', errors})
+            
+        })
+        .catch((err) => {
+            res.send(err.meesage)
+        })
+    }
+
+    static afterEdit (req, res) {
+        let id = req.params.id
+        
+        let dataNew = {
+            name:req.body.name,
+            stock: req.body.stock
+        }
+
+        Medicine.update(dataNew, {
+            where: {id: req.params.id}
+        })
+
+        .then (() => {
+            res.redirect('/medicine')
         })
         .catch(err => {
-            res.send(err)
+            let errors = []
+            err.errors.forEach(error => {
+                errors.push(error.message)
+            })
+            res.redirect(`/medicine/edit/${id}?errors=${errors}`)
+        })
+    }
+
+    static delete (req, res) {
+        Medicine.destroy ({
+            where: {id: Number(req.params.id)}
+        })
+        .then (() => {
+            res.redirect('/medicine')
+        })
+        .catch(err => {
+            res.send(err.message)
         })
     }
 }
 
-module.exports = ControllerMedicine;
+module.exports = MedicineController
